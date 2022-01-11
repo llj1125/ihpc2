@@ -6,7 +6,7 @@ import cv2
 import sys
 import numpy as np
 
-image = cv2.imread("img_2.png")
+image = cv2.imread("opencv_frame_0.png")
 
 
 h,w,c = image.shape
@@ -18,7 +18,7 @@ down_height = int(down_width * ratio)
 down_points = (down_width, down_height)
 resized_down = cv2.resize(image, down_points, interpolation=cv2.INTER_LINEAR)
 
-aruco_dict = cv2.aruco.Dictionary_get(cv2.aruco.DICT_4X4_50)
+''' aruco_dict = cv2.aruco.Dictionary_get(cv2.aruco.DICT_4X4_50)
 parameters = cv2.aruco.DetectorParameters_create()
 
 # Detect the markers.
@@ -30,7 +30,7 @@ print(corners)
 
 cv2.imshow("arUco detection",out)
 cv2.waitKey(0)
-cv2.destroyAllWindows()
+cv2.destroyAllWindows() '''
 
 """Detecting the chess board"""
 
@@ -38,16 +38,18 @@ cv2.destroyAllWindows()
 params = cv2.SimpleBlobDetector_Params()
 
 # Change thresholds
-params.minThreshold = 100;
-params.maxThreshold = 200;
+params.minThreshold = 50;
+params.maxThreshold = 15000;
 
 # Filter by Area.
 params.filterByArea = True
-params.minArea = 700
-params.maxArea = 1550
+params.minArea = 30
+params.maxArea = 800 
 
 # Filter by Circularity
-params.filterByCircularity = False
+params.filterByCircularity = True
+params.minCircularity = 0.7
+params.maxCircularity = 1
 
 #Filter by Color
 params.filterByColor = False
@@ -92,15 +94,23 @@ cordinate = []
 for keypoint in keypoints:
     pixelX = int(keypoint.pt[0])
     pixelY = int(keypoint.pt[1])
-    cmX = pixelX * 0.0264583333
-    cmY = pixelY * 0.0264583333
-    cmX = float("{:.2f}".format(cmX))
-    cmY = float("{:.2f}".format(cmY))
-    cordTup = (cmX,cmY)
+    mXcv = pixelX * 0.000264583333
+    mYcv = pixelY * 0.000264583333
+    mXcv = float("{:.4f}".format(mXcv))
+    mYcv = float("{:.4f}".format(mYcv))
+    mXurx = 0.8625 - mYcv
+    mYurx = 0.0467 - mXcv
+    cordTup = (mXcv,mYcv)
     cordinate.append(cordTup)
-print (cordinate)
+    print (cordTup)
+#print (cordinate)
 
-
+imageCircle = resized_up.copy()
+circle_center = (29, 31)
+radius = 10
+cv2.circle(imageCircle, circle_center, radius, (255, 255, 255), 3, cv2.LINE_AA)
+cv2.imshow("image Circle", imageCircle)
+cv2.waitKey(0)
 
 # Draw detected blobs as red circles.
 # cv2.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS ensures the size of the circle corresponds to the size of blob
@@ -171,8 +181,4 @@ steps = {
 
 print(steps[42])
 
-
-
-
-
-
+cv2.destroyAllWindows()
