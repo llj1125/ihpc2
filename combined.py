@@ -105,12 +105,12 @@ for keypoint in keypoints:
     print (cordTup)
 #print (cordinate)
 
-imageCircle = resized_up.copy()
+"""imageCircle = resized_up.copy()
 circle_center = (29, 31)
 radius = 10
 cv2.circle(imageCircle, circle_center, radius, (255, 255, 255), 3, cv2.LINE_AA)
 cv2.imshow("image Circle", imageCircle)
-cv2.waitKey(0)
+cv2.waitKey(0)"""
 
 # Draw detected blobs as red circles.
 # cv2.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS ensures the size of the circle corresponds to the size of blob
